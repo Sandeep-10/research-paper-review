@@ -1,0 +1,14 @@
+crewai
+crewai[groq]
+crewai[tools]
+crewai[litellm]
+langchain_community
+pypdf
+langchain_mistralai
+langchain_core
+opentelemetry-instrumentation-crewai
+opentelemetry-instrumentation-openai
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv

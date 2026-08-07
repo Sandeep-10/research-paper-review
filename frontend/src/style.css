@@ -1,0 +1,56 @@
+/* Custom utility classes extending Tailwind CDN setup */
+
+@layer utilities {
+  .glass-panel {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid #E2E8F0;
+  }
+
+  .ai-shimmer {
+    background: linear-gradient(90deg, #1a365d 25%, #00adce 50%, #1a365d 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  .terminal-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .terminal-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.15);
+  }
+  .terminal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .blinking-cursor::after {
+    content: '█';
+    animation: blink 1s step-end infinite;
+    color: #58a6ff;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Base style resets */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f7fafc;
+  color: #181c1e;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: 'Playfair Display', serif;
+}

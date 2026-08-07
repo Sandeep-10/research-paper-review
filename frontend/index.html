@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScholarAI - AI Research Review Crew</title>
+
+  <!-- Tailwind CSS & Icons -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#002045',
+            'primary-container': '#1a365d',
+            'on-primary-container': '#86a0cd',
+            secondary: '#555f71',
+            tertiary: '#00242d',
+            'tertiary-container': '#003b48',
+            'on-tertiary-container': '#00adce',
+            background: '#f7fafc',
+            surface: '#f7fafc',
+            'surface-container': '#ebeef0',
+            'surface-container-high': '#e5e9eb',
+            'surface-container-highest': '#e0e3e5',
+            'on-surface': '#181c1e',
+            'on-surface-variant': '#43474e',
+            'outline-variant': '#c4c6cf',
+            'terminal-bg': '#0d1117',
+            'terminal-text': '#8b949e',
+            'terminal-accent': '#58a6ff'
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="bg-background text-on-surface font-sans antialiased overflow-x-hidden selection:bg-primary-container selection:text-white">
+
+  <div id="app" class="flex min-h-screen">
+    <!-- Side Navigation Bar -->
+    <nav class="h-screen w-64 fixed left-0 top-0 overflow-y-auto border-r border-outline-variant/30 backdrop-blur-xl bg-white/80 shadow-sm flex flex-col z-50">
+      <div class="px-6 py-6 border-b border-outline-variant/20">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold font-serif text-xl shadow-md">S</div>
+          <div>
+            <h1 class="font-serif text-xl font-bold text-primary leading-tight">ScholarAI</h1>
+            <p class="text-xs text-on-surface-variant font-medium">Academic Console</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 py-4">
+        <button id="btn-new-submission" class="w-full bg-primary text-white text-sm font-semibold py-3 px-4 rounded-lg shadow-sm flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-95">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          New Submission
+        </button>
+      </div>
+
+      <ul class="flex-1 px-3 space-y-1">
+        <li>
+          <button id="nav-submission" class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-primary bg-surface-container/70 font-semibold transition-all">
+            <span class="material-symbols-outlined text-[20px]">upload_file</span>
+            <span>Submission Center</span>
+          </button>
+        </li>
+        <li>
+          <button id="nav-console" class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-on-surface-variant hover:bg-surface-container transition-all">
+            <span class="material-symbols-outlined text-[20px]">terminal</span>
+            <span>Live Review Console</span>
+          </button>
+        </li>
+        <li>
+          <button id="nav-report" class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-on-surface-variant hover:bg-surface-container transition-all">
+            <span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+            <span>Final Synthesis Report</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="p-4 border-t border-outline-variant/20 bg-surface-container/30 text-xs text-on-surface-variant space-y-2">
+        <div class="flex items-center justify-between font-mono">
+          <span>CrewAI Status:</span>
+          <span id="backend-status-badge" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">Ready</span>
+        </div>
+        <div class="flex items-center justify-between font-mono">
+          <span>Backend Target:</span>
+          <span class="font-semibold text-primary">localhost:8005</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Top Navigation Header -->
+    <header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-white/80 backdrop-blur-md border-b border-outline-variant/30 shadow-xs flex justify-between items-center px-8 h-16">
+      <div class="flex items-center gap-6">
+        <h2 id="page-title" class="font-serif text-xl font-bold text-primary">Submission Center</h2>
+        <span class="h-4 w-px bg-outline-variant/40"></span>
+        <div class="flex items-center gap-4 text-xs font-semibold text-on-surface-variant">
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Methodology</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Novelty</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-500"></span> Clarity</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Limitations</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="btn-toggle-mock" class="text-xs font-mono px-3 py-1.5 rounded-md border border-outline-variant/40 hover:bg-surface-container transition-all flex items-center gap-1.5">
+          <span id="mock-indicator" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="mock-label">Backend Active (Live)</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="ml-64 pt-16 w-[calc(100%-16rem)] min-h-screen bg-background flex-1">
+      
+      <!-- SCREEN 1: SUBMISSION CENTER -->
+      <section id="view-submission" class="p-8 max-w-6xl mx-auto space-y-8">
+        <div class="bg-gradient-to-r from-primary-container via-primary to-tertiary-container rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
+          <div class="relative z-10 max-w-2xl">
+            <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-mono font-medium tracking-wide uppercase text-on-tertiary-container border border-white/20">AI Research Review Crew</span>
+            <h1 class="font-serif text-4xl font-bold mt-4 mb-3 leading-tight">Rigorous Evaluation.<br>Accelerated Discovery.</h1>
+            <p class="text-white/80 text-base leading-relaxed">
+              Submit your manuscript or dataset for multi-agent peer review. Four specialized AI agents analyze methodology, novelty, clarity, and limitations concurrently before synthesis by the Program Chair Judge.
+            </p>
+          </div>
+          <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
+        <!-- Upload Dropzone Card -->
+        <div class="bg-white rounded-xl border border-outline-variant/30 p-8 shadow-sm space-y-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="font-serif text-2xl font-bold text-primary">Upload Manuscript</h2>
+              <p class="text-sm text-on-surface-variant mt-1">Select a research paper (.pdf) or experimental dataset (.csv) to begin evaluation.</p>
+            </div>
+            <span class="px-2.5 py-1 bg-surface-container rounded text-xs font-mono font-semibold text-primary">Supported: PDF, CSV</span>
+          </div>
+
+          <div id="dropzone" class="border-2 border-dashed border-outline-variant/60 hover:border-primary-container rounded-xl p-10 text-center bg-surface-container/20 hover:bg-surface-container/50 transition-all cursor-pointer group flex flex-col items-center justify-center gap-3">
+            <input type="file" id="file-input" class="hidden" accept=".pdf,.csv">
+            <div class="w-16 h-16 rounded-full bg-primary/5 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-3xl">cloud_upload</span>
+            </div>
+            <div>
+              <p class="text-base font-semibold text-primary">Drag and drop your manuscript file here</p>
+              <p class="text-xs text-on-surface-variant mt-1">or click to browse your local computer</p>
+            </div>
+          </div>
+
+          <!-- File Upload Progress / Active File Info -->
+          <div id="file-info" class="hidden bg-surface-container/40 border border-outline-variant/30 rounded-lg p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span id="file-icon" class="material-symbols-outlined text-2xl text-primary">picture_as_pdf</span>
+              <div>
+                <p id="file-name" class="font-semibold text-sm text-primary">paper.pdf</p>
+                <p id="file-meta" class="text-xs text-on-surface-variant">Ready for indexing</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="btn-remove-file" class="text-xs text-rose-600 hover:text-rose-800 font-medium">Remove</button>
+              <button id="btn-start-review" class="bg-primary text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-primary-container shadow-md transition-all active:scale-95 flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">play_arrow</span>
+                Start Review Crew
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review Crew Agents Overview Grid -->
+        <div>
+          <h3 class="font-serif text-xl font-bold text-primary mb-4">Meet the Review Crew</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs space-y-2 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-2 text-emerald-700">
+                <span class="material-symbols-outlined">science</span>
+                <h4 class="font-bold text-sm">Methodology</h4>
+              </div>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Evaluates experimental setup, baselines, statistical power, and reproducibility.</p>
+              <span class="inline-block text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">Specialist Agent</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs space-y-2 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-2 text-blue-700">
+                <span class="material-symbols-outlined">auto_awesome</span>
+                <h4 class="font-bold text-sm">Novelty Assessment</h4>
+              </div>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Cross-references publications to determine true originality vs incremental work.</p>
+              <span class="inline-block text-[10px] font-mono text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Specialist Agent</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs space-y-2 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-2 text-purple-700">
+                <span class="material-symbols-outlined">article</span>
+                <h4 class="font-bold text-sm">Clarity & Writing</h4>
+              </div>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Analyzes mathematical flow, figure clarity, notation definitions, and academic tone.</p>
+              <span class="inline-block text-[10px] font-mono text-purple-800 bg-purple-50 px-2 py-0.5 rounded">Specialist Agent</span>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs space-y-2 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-2 text-amber-700">
+                <span class="material-symbols-outlined">gavel</span>
+                <h4 class="font-bold text-sm">Limitations & Ethics</h4>
+              </div>
+              <p class="text-xs text-on-surface-variant leading-relaxed">Identifies unstated limitations, overclaims, cherry-picked results, and ethics flags.</p>
+              <span class="inline-block text-[10px] font-mono text-amber-800 bg-amber-50 px-2 py-0.5 rounded">Specialist Agent</span>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: LIVE REVIEW CONSOLE -->
+      <section id="view-console" class="hidden h-[calc(100vh-4rem)] flex flex-col md:flex-row overflow-hidden">
+        <!-- Live Terminal Stream -->
+        <div class="flex-1 bg-terminal-bg text-terminal-text font-mono flex flex-col border-r border-[#30363d] overflow-hidden">
+          <div class="bg-[#161b22] px-4 py-2 border-b border-[#30363d] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+              <span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+              <span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+              <span class="ml-2 text-xs text-[#8b949e]">crewai-execution.log</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+              </span>
+              <span class="text-xs text-cyan-400 font-semibold uppercase tracking-wider">Live Execution</span>
+            </div>
+          </div>
+          <div id="terminal-output" class="flex-1 p-4 overflow-y-auto terminal-scroll text-xs space-y-2">
+            <div class="text-[#484f58]"># CrewAI Execution initialized</div>
+          </div>
+        </div>
+
+        <!-- Live Review Sidebar -->
+        <aside class="w-full md:w-[380px] bg-white border-l border-outline-variant/30 flex flex-col h-full overflow-y-auto p-6 space-y-6">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="bg-blue-100 text-blue-800 text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase">Processing</span>
+              <span id="review-id" class="text-xs font-mono text-on-surface-variant">ID: DOC-ACTIVE</span>
+            </div>
+            <h3 id="current-paper-title" class="font-serif text-lg font-bold text-primary leading-tight">Attention Is All You Need</h3>
+            <p id="current-paper-filename" class="text-xs text-on-surface-variant font-mono mt-1">manuscript.pdf</p>
+          </div>
+
+          <div class="bg-surface-container/40 p-4 rounded-xl border border-outline-variant/20 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold text-on-surface-variant">Review Progress</span>
+              <span id="progress-percent" class="font-mono font-bold text-primary">0%</span>
+            </div>
+            <div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+              <div id="progress-bar" class="h-full bg-primary transition-all duration-300 w-0"></div>
+            </div>
+          </div>
+
+          <!-- Specialist Agents Live Status List -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold text-primary uppercase tracking-wider">Agent Pipeline Status</h4>
+            
+            <div class="p-3 bg-surface-container/30 rounded-lg border border-outline-variant/20 flex items-center justify-between text-xs">
+              <span class="font-medium text-emerald-800">Methodology Reviewer</span>
+              <span id="status-methodology" class="font-mono px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800">Queued</span>
+            </div>
+            <div class="p-3 bg-surface-container/30 rounded-lg border border-outline-variant/20 flex items-center justify-between text-xs">
+              <span class="font-medium text-blue-800">Novelty Analyst</span>
+              <span id="status-novelty" class="font-mono px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800">Queued</span>
+            </div>
+            <div class="p-3 bg-surface-container/30 rounded-lg border border-outline-variant/20 flex items-center justify-between text-xs">
+              <span class="font-medium text-purple-800">Clarity Expert</span>
+              <span id="status-clarity" class="font-mono px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800">Queued</span>
+            </div>
+            <div class="p-3 bg-surface-container/30 rounded-lg border border-outline-variant/20 flex items-center justify-between text-xs">
+              <span class="font-medium text-amber-800">Limitations Specialist</span>
+              <span id="status-limitations" class="font-mono px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800">Queued</span>
+            </div>
+            <div class="p-3 bg-surface-container/30 rounded-lg border border-outline-variant/20 flex items-center justify-between text-xs">
+              <span class="font-medium text-primary font-bold">Program Chair Judge</span>
+              <span id="status-judge" class="font-mono px-2 py-0.5 rounded text-[10px] bg-slate-200 text-slate-700">Waiting</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- SCREEN 3: FINAL SYNTHESIS REPORT -->
+      <section id="view-report" class="hidden p-8 max-w-6xl mx-auto space-y-8">
+        <!-- Verdict Header Card -->
+        <div class="bg-white p-8 rounded-2xl border border-outline-variant/30 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div class="space-y-2 max-w-2xl">
+            <div class="flex items-center gap-3">
+              <span id="report-verdict-badge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">ACCEPT</span>
+              <span class="text-xs text-on-surface-variant font-mono">Confidence: <span id="report-confidence">92%</span></span>
+            </div>
+            <h1 id="report-paper-title" class="font-serif text-3xl font-bold text-primary">Attention Is All You Need</h1>
+            <p id="report-venue" class="text-sm font-semibold text-on-tertiary-container">Suggested Venue: NeurIPS / ICML Oral Presentation</p>
+          </div>
+
+          <div class="bg-surface-container/40 p-6 rounded-xl border border-outline-variant/20 text-center min-w-[180px]">
+            <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Weighted Final Score</span>
+            <div id="report-final-score" class="font-serif text-4xl font-bold text-primary mt-1">8.45<span class="text-base font-normal text-on-surface-variant">/10</span></div>
+          </div>
+        </div>
+
+        <!-- Individual Scores & Summary -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs text-center space-y-1">
+            <span class="text-xs text-on-surface-variant font-semibold">Novelty (35%)</span>
+            <div id="score-novelty" class="text-2xl font-bold text-blue-700 font-serif">9.0/10</div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs text-center space-y-1">
+            <span class="text-xs text-on-surface-variant font-semibold">Methodology (30%)</span>
+            <div id="score-methodology" class="text-2xl font-bold text-emerald-700 font-serif">8.5/10</div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs text-center space-y-1">
+            <span class="text-xs text-on-surface-variant font-semibold">Clarity (20%)</span>
+            <div id="score-clarity" class="text-2xl font-bold text-purple-700 font-serif">8.0/10</div>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-outline-variant/30 shadow-xs text-center space-y-1">
+            <span class="text-xs text-on-surface-variant font-semibold">Limitations (15%)</span>
+            <div id="score-limitations" class="text-2xl font-bold text-amber-700 font-serif">7.5/10</div>
+          </div>
+        </div>
+
+        <!-- Summary & Author Recommendations -->
+        <div class="bg-white p-6 rounded-xl border border-outline-variant/30 shadow-xs space-y-4">
+          <h3 class="font-serif text-xl font-bold text-primary">Summary for Authors</h3>
+          <p id="report-summary" class="text-sm text-on-surface leading-relaxed">
+            The manuscript presents a transformative architecture replacing recurrence entirely with parallelizable self-attention. The empirical performance and execution speed set a new benchmark for sequence modeling.
+          </p>
+        </div>
+
+        <!-- Strengths, Weaknesses, Revisions Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div class="bg-white p-6 rounded-xl border border-outline-variant/30 shadow-xs space-y-3">
+            <div class="flex items-center gap-2 text-emerald-700">
+              <span class="material-symbols-outlined">thumb_up</span>
+              <h4 class="font-bold text-base">Top Strengths</h4>
+            </div>
+            <ul id="report-strengths" class="text-xs text-on-surface space-y-2 list-disc list-inside">
+              <li>Groundbreaking self-attention mechanism eliminating recurrence</li>
+            </ul>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl border border-outline-variant/30 shadow-xs space-y-3">
+            <div class="flex items-center gap-2 text-rose-700">
+              <span class="material-symbols-outlined">thumb_down</span>
+              <h4 class="font-bold text-base">Top Weaknesses</h4>
+            </div>
+            <ul id="report-weaknesses" class="text-xs text-on-surface space-y-2 list-disc list-inside">
+              <li>Quadratic memory consumption complexity O(N²)</li>
+            </ul>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl border border-outline-variant/30 shadow-xs space-y-3">
+            <div class="flex items-center gap-2 text-amber-700">
+              <span class="material-symbols-outlined">fact_check</span>
+              <h4 class="font-bold text-base">Mandatory Revisions</h4>
+            </div>
+            <ul id="report-revisions" class="text-xs text-on-surface space-y-2 list-disc list-inside">
+              <li>Clarify positional encoding hyperparameter sensitivity</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Export Actions -->
+        <div class="flex justify-end gap-4 pt-4">
+          <button id="btn-export-json" class="bg-surface-container text-primary font-semibold text-xs px-4 py-2.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container-high transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">download</span>
+            Export JSON Decision
+          </button>
+          <button id="btn-new-review-from-report" class="bg-primary text-white font-semibold text-xs px-5 py-2.5 rounded-lg hover:bg-primary-container shadow-md transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">add</span>
+            Review Another Manuscript
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
