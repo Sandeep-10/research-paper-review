@@ -160,6 +160,36 @@
             </div>
           </div>
 
+          <!-- Warning Alert & Example PDF Selection -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- Warning block -->
+            <div class="flex items-start gap-3 p-4 bg-amber-50/70 border border-amber-200/40 rounded-xl text-amber-900 text-xs leading-relaxed">
+              <span class="material-symbols-outlined text-amber-600 select-none text-[20px] mt-0.5">warning</span>
+              <div>
+                <span class="font-bold text-amber-950">Limit: 6 Pages max</span><br>
+                Please don't use PDFs with more than 6 pages to avoid potential token context errors during agent analysis.
+              </div>
+            </div>
+
+            <!-- Example paper button -->
+            <button type="button" id="btn-example-pdf" class="flex items-center justify-between p-4 bg-slate-50 hover:bg-primary/5 border border-outline-variant/30 hover:border-primary/30 rounded-xl transition-all duration-300 text-left group">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[24px]">picture_as_pdf</span>
+                </div>
+                <div>
+                  <span class="font-semibold text-xs text-primary block">example_paper.pdf</span>
+                  <span class="text-[10px] text-on-surface-variant flex items-center gap-1">
+                    <span>4 pages</span>
+                    <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+                    <span class="text-emerald-600 font-medium">Click to Auto-Run Review</span>
+                  </span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-primary/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-[20px]">arrow_forward</span>
+            </button>
+          </div>
+
           <!-- File Upload Progress / Active File Info -->
           <div id="file-info" class="hidden bg-surface-container/40 border border-outline-variant/30 rounded-lg p-4 flex items-center justify-between">
             <div class="flex items-center gap-3">

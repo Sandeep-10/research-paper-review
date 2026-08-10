@@ -1,0 +1,253 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R 5 0 R 6 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 8 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 9 0 R >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 10 0 R >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 7 0 R >> >> /Contents 11 0 R >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+8 0 obj
+<< /Length 1824 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+72 720 Td
+(LSTM Variants for Chaotic Dynamical Systems: An Empirical Study on the Lorenz Attractor) Tj
+T*
+(Ruslan Gokhman - Yeshiva University - rgokhman@mail.yu.edu) Tj
+T*
+() Tj
+T*
+(Abstract) Tj
+T*
+(Forecasting chaotic dynamical systems such as the Lorenz attractor is notoriously difficult:) Tj
+T*
+(small numerical errors are amplified exponentially over long autoregressive rollouts.) Tj
+T*
+(We study seven recurrent and convolutional architectures for the AI-DEEDS 2026) Tj
+T*
+(Chaotic Systems Challenge: a vanilla LSTM, an LSTM with additive attention,) Tj
+T*
+(a Bidirectional LSTM \(BiLSTM\), a BiLSTM trained with the Huber loss,) Tj
+T*
+(a Temporal Convolutional Network \(TCN\), a CNN front-end followed by an LSTM,) Tj
+T*
+(and a CNN front-end followed by a BiLSTM. All models share the same pre-processing,) Tj
+T*
+(sequence length, and rollout procedure, isolating the contribution of each design choice.) Tj
+T*
+(The challenge scores predictions on a 0-100 scale where higher is better.) Tj
+T*
+(We obtain leaderboard scores between 45.72 and 58.81, with the BiLSTM trained) Tj
+T*
+(with Huber loss being the strongest configuration.) Tj
+T*
+() Tj
+T*
+(Keywords: Chaotic systems, Lorenz attractor, LSTM, BiLSTM, Huber loss, time-series forecasting) Tj
+T*
+() Tj
+T*
+(1 Introduction) Tj
+T*
+(The Lorenz 63 system is a canonical example of deterministic chaos: a three-dimensional) Tj
+T*
+(ODE whose trajectories never repeat and depend sensitively on initial conditions.) Tj
+T*
+(Tiny errors in the predicted state are amplified exponentially by the positive Lyapunov exponent.) Tj
+T*
+() Tj
+T*
+(2 Related Work) Tj
+T*
+(Common Task Frameworks for scientific ML. The AI-DEEDS competition is part of a growing) Tj
+T*
+(family of Common Task Frameworks \(CTFs\) designed to replace ad hoc comparisons.) Tj
+T*
+ET
+
+endstream
+endobj
+9 0 obj
+<< /Length 1490 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+72 720 Td
+(Physics-informed and hybrid approaches. SINDy recovers sparse polynomial governing equations) Tj
+T*
+(directly from data and produces interpretable models that generalize well.) Tj
+T*
+(Robust losses for time-series. The Huber loss has a long history in robust statistics and has) Tj
+T*
+(been applied to neural network training to reduce sensitivity to outliers.) Tj
+T*
+() Tj
+T*
+(3 Problem Setting) Tj
+T*
+(The competition provides several training trajectories. The task is partitioned into nine evaluation) Tj
+T*
+(pairs, each specifying training trajectory, initial window, and forecast steps \(1,000 or 10,000\).) Tj
+T*
+(Two features make the task especially challenging:) Tj
+T*
+(- Long horizons: Pairs 2 and 4 require 10,000 autoregressive steps.) Tj
+T*
+(- Heterogeneous regimes: Pairs 6 and 7 use different parameter regimes.) Tj
+T*
+() Tj
+T*
+(4 Methods) Tj
+T*
+(Pre-processing and shared pipeline. For each pair the relevant training trajectory is concatenated) Tj
+T*
+(and standardized. We build supervised pairs with sliding window of length L = 50.) Tj
+T*
+(\(A\) Vanilla LSTM. A 2-layer unidirectional LSTM with hidden size 128.) Tj
+T*
+(\(B\) LSTM + Attention. Augments \(A\) with a Bahdanau-style additive attention pooling over time.) Tj
+T*
+(\(C\) Bidirectional LSTM \(BiLSTM\). Replaces the LSTM in \(A\) with a bidirectional one.) Tj
+T*
+(\(D\) BiLSTM + Huber loss. Same architecture as \(C\), but trained with the Huber loss with delta = 1.0.) Tj
+T*
+ET
+
+endstream
+endobj
+10 0 obj
+<< /Length 1504 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+72 720 Td
+(\(E\) Temporal Convolutional Network \(TCN\). A 4-layer dilated causal CNN with kernel size 3.) Tj
+T*
+(\(F\) CNN + LSTM. A two-layer 1D CNN front-end followed by a 2-layer unidirectional LSTM.) Tj
+T*
+(\(G\) CNN + BiLSTM. Identical to \(F\) but with a bidirectional LSTM.) Tj
+T*
+() Tj
+T*
+(5 Results) Tj
+T*
+(Table 1: AI-DEEDS 2026 leaderboard scores \(higher is better; 100 is perfect\):) Tj
+T*
+(- \(A\) Vanilla LSTM: Score 56.81, Mean Loss 0.0550) Tj
+T*
+(- \(B\) LSTM + Attention: Score 45.72, Mean Loss 0.1307) Tj
+T*
+(- \(C\) BiLSTM \(MSE\): Score 58.16, Mean Loss 0.0289) Tj
+T*
+(- \(D\) BiLSTM + Huber loss: Score 58.81, Mean Loss 0.0149 \(Best\)) Tj
+T*
+(- \(E\) TCN + Huber: Score 46.55, Mean Loss 0.0272) Tj
+T*
+(- \(F\) CNN + LSTM + Huber: Score 54.19, Mean Loss 0.0405) Tj
+T*
+(- \(G\) CNN + BiLSTM + Huber: Score 53.52, Mean Loss 0.0280) Tj
+T*
+() Tj
+T*
+(The BiLSTM with Huber loss is the strongest configuration on every metric.) Tj
+T*
+(Per-pair RMSE on pair 1 \(Lorenz 63 baseline\). Table 2 drills into pair 1.) Tj
+T*
+(The unidirectional LSTM and the BiLSTM + Huber both achieve perfect single-step prediction.) Tj
+T*
+() Tj
+T*
+(6 Discussion) Tj
+T*
+(Why bidirectional context helps. At first glance, BiLSTMs seem ill-suited to autoregressive forecasting) Tj
+T*
+(because at inference time there is no future beyond the input window. Within each window, however,) Tj
+T*
+(the backward pass enriches the representation, helping identify the local dynamical mode.) Tj
+T*
+ET
+
+endstream
+endobj
+11 0 obj
+<< /Length 1305 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+72 720 Td
+(Why Huber outperforms MSE. Chaotic systems produce occasional large prediction errors.) Tj
+T*
+(MSE squares such residuals and lets them dominate the gradient. Huber loss caps this influence.) Tj
+T*
+(Why attention degraded performance. Three factors contribute: short window \(L=50\),) Tj
+T*
+(attention head/MLP increase overfitting capacity, and Lorenz is near-Markovian \(most recent is best\).) Tj
+T*
+(Why the CNN front-ends did not help. The CNN parameters increase capacity to overfit and may smooth) Tj
+T*
+(away the sharp lobe transitions.) Tj
+T*
+() Tj
+T*
+(7 Conclusion and Future Work) Tj
+T*
+(We compared seven LSTM-family forecasters on a chaotic time series benchmark.) Tj
+T*
+(Bidirectional context combined with Huber loss gives the best leaderboard score \(58.81\).) Tj
+T*
+(Standard improvements such as attention and CNN front-ends are not universally beneficial.) Tj
+T*
+() Tj
+T*
+(References) Tj
+T*
+([1] E. N. Lorenz. Deterministic nonperiodic flow. Journal of the Atmospheric Sciences, 1963.) Tj
+T*
+([2] S. Hochreiter and J. Schmidhuber. Long short-term memory. Neural Computation, 1997.) Tj
+T*
+([3] D. Bahdanau, K. Cho, and Y. Bengio. Neural machine translation. In ICLR, 2015.) Tj
+T*
+([4] P. J. Huber. Robust estimation of a location parameter. 1964.) Tj
+T*
+ET
+
+endstream
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000133 00000 n 
+0000000259 00000 n 
+0000000385 00000 n 
+0000000512 00000 n 
+0000000639 00000 n 
+0000000709 00000 n 
+0000002585 00000 n 
+0000004127 00000 n 
+0000005684 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+7042
+%%EOF
