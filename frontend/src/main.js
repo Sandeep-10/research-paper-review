@@ -351,3 +351,9 @@ btnExportJson.addEventListener('click', () => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+// Set the backend target hostname dynamically
+const backendTargetLabel = document.getElementById('backend-target-label');
+if (backendTargetLabel) {
+  backendTargetLabel.textContent = window.location.host || 'localhost:8005';
+}

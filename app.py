@@ -13,6 +13,7 @@ if hasattr(sys.stderr, "reconfigure"):
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 
 from langchain_community.document_loaders import PyPDFLoader, CSVLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -463,3 +464,8 @@ async def run_review_process():
             "X-Accel-Buffering": "no",
         }
     )
+
+# Serve Vite frontend static assets if they are built
+frontend_dist_path = os.path.join(os.path.dirname(__file__), "frontend", "dist")
+if os.path.exists(frontend_dist_path):
+    app.mount("/", StaticFiles(directory=frontend_dist_path, html=True), name="frontend")
