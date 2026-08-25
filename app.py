@@ -60,6 +60,7 @@ groq_llm = LLM(
     model="groq/openai/gpt-oss-120b",
     api_key=GROQ_API_KEY,
     verbose=True,
+    response_format={"type": "json_object"}
 )
 
 mistral_llm = LLM(
@@ -155,13 +156,13 @@ judge_agent = Agent(
 
 methodology_task = Task(
     description=(
-        "Use retrieve_content tool (max 1 query). Briefly evaluate: "
-        "experimental_design, dataset_quality, statistical_rigor, reproducibility, fairness_of_comparison. "
+        "Use retrieve_content tool (max 1 query) to search the document. "
+        "Briefly evaluate: experimental_design, dataset_quality, statistical_rigor, reproducibility, fairness_of_comparison. "
         "Check fair baselines, std devs, ablations. Cite section numbers. "
-        "CRITICAL: Keep all text entries short and impact-focused (max 1 sentence per field)."
+        "CRITICAL: Do NOT attempt to call a tool named 'json'. Provide your final answer as regular JSON text in your response body."
     ),
     expected_output=(
-        "Raw valid JSON matching exact schema: "
+        'A valid JSON string matching this exact schema (do not call a tool for this): '
         '{"dimension_scores":{"experimental_design":int,"dataset_quality":int,"statistical_rigor":int,'
         '"reproducibility":int,"fairness_of_comparison":int},"overall_methodology_score":int,'
         '"strengths":["short string"],"weaknesses":["short string"],"improvement_suggestions":["short string"],'
@@ -233,7 +234,7 @@ judge_task = Task(
         "Calculate score: novelty*0.35 + methodology*0.30 + clarity*0.20 + limitations*0.15. "
         "Hard reject ONLY if novelty<3 or methodology<2. Landmark papers score >= WEAK_ACCEPT. "
         "Write a brief 2-sentence author summary and suggest a venue. "
-        "CRITICAL: Return valid JSON object only."
+        "CRITICAL: Do NOT attempt to call a tool named 'json'. Return valid JSON object only."
     ),
     expected_output=(
         'A valid JSON object: '
