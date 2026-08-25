@@ -55,7 +55,7 @@ MISTRAL_API_KEY_2 = (os.getenv("mistral_api_key_2") or "").strip()
 
 # LLM Configurations
 groq_llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+    model="groq/gpt-oss-120b",
     api_key=GROQ_API_KEY,
     verbose=True,
 )
@@ -135,7 +135,7 @@ limitations_reviewer = Agent(
         "You are an AI ethics researcher. "
         "Uncover unstated limitations, overclaims, cherry-picked results, and ethical risks."
     ),
-    llm=groq_llm,
+    llm=mistral_llm,
     tools=[retrive_content],
     verbose=True
 )
@@ -468,4 +468,4 @@ async def run_review_process():
 # Serve Vite frontend static assets if they are built
 frontend_dist_path = os.path.join(os.path.dirname(__file__), "frontend", "dist")
 if os.path.exists(frontend_dist_path):
-    app.mount("/", StaticFiles(directory=frontend_dist_path, html=True), name="frontend")
+    app.mount("/", StaticFiles(directory=frontend_dist_path, html=True), name="frontend")
