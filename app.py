@@ -25,6 +25,7 @@ from crewai.tools import tool
 from langsmith.integrations.otel import OtelSpanProcessor
 from opentelemetry import trace
 from opentelemetry.instrumentation.crewai import CrewAIInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
 
 load_dotenv()
 
@@ -38,8 +39,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-tracer_provider = trace.get_tracer_provider()
+tracer_provider = TracerProvider()
 tracer_provider.add_span_processor(OtelSpanProcessor())
+trace.set_tracer_provider(tracer_provider)
 CrewAIInstrumentor().instrument(tracer_provider=tracer_provider)
 
 try:
