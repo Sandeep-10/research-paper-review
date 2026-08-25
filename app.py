@@ -57,7 +57,7 @@ MISTRAL_API_KEY_2 = (os.getenv("mistral_api_key_2") or "").strip()
 
 # LLM Configurations
 groq_llm = LLM(
-    model="groq/openai/gpt-oss-120b",
+    model="groq/qwen/qwen3.6-27b",
     api_key=GROQ_API_KEY,
     verbose=True,
 )
@@ -157,7 +157,7 @@ methodology_task = Task(
     description=(
         "Use retrieve_content tool (max 1 query). Briefly evaluate: "
         "experimental_design, dataset_quality, statistical_rigor, reproducibility, fairness_of_comparison. "
-        "Check fair baselines, std devs, ablations, and leak-free splits. Cite section numbers. "
+        "Check fair baselines, std devs, ablations. Cite section numbers. "
         "CRITICAL: Keep all text entries short and impact-focused (max 1 sentence per field)."
     ),
     expected_output=(
