@@ -57,7 +57,7 @@ MISTRAL_API_KEY_2 = (os.getenv("mistral_api_key_2") or "").strip()
 
 # LLM Configurations
 groq_llm = LLM(
-    model="groq/qwen/qwen3.6-27b",
+    model="groq/openai/gpt-oss-20b",
     api_key=GROQ_API_KEY,
     verbose=True,
 )
